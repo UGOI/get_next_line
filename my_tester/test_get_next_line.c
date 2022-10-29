@@ -11,8 +11,28 @@
 /* ************************************************************************** */
 
 #include"../get_next_line.h"
+#include"stdio.h"
+#include <sys/stat.h>
+#include <fcntl.h>
 
-int	main(void)
+void	print_get_next_line(int fd)
 {
-	get_next_line(1);
+	char	*buf;
+
+	while (buf)
+	{
+		buf = get_next_line(fd);
+		if (buf)
+			printf("%s", buf);
+	}
 }
+
+int main(void)
+{
+	int	fd;
+
+	fd = open("text.txt", O_RDONLY | O_CREAT);
+	print_get_next_line(fd);
+	print_get_next_line(1);
+}
+ 

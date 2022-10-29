@@ -10,15 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include<unistd.h>
-#include<stdio.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#ifndef BUFFER_SIZE    
+ # define BUFFER_SIZE 1
+#endif
 
-char	*get_next_line(int fd)
+char*get_next_line(int fd)
 {
-	char	buf[10];
-	int		ret;
+	char	*buf;
+	size_t	ret;
 
-	ret = read(0, buf, 10);
-	printf("%s\n", buf);
-	return (NULL);
+	printf("%d\n", BUFFER_SIZE);
+
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return(NULL);
+	
+	ret = read(fd, buf, BUFFER_SIZE);
+	if (!ret)
+		return(NULL);
+	buf[ret] = 0;
+	return (buf);
 }

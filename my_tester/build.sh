@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd ..
-make
-cd my_printf_tester
-gcc -o test_$1 test_$1.c -L ../ -lftprintf
-./test_$1
+gcc -Wall -Wextra -Werror -D BUFFER_SIZE=10000000 test_get_next_line.c ../get_next_line.c
+# gcc -Wall -Wextra -Werror test_get_next_line.c ../get_next_line.c
+./a.out 
