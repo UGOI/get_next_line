@@ -14,25 +14,33 @@
 #include"stdio.h"
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 
 void	print_get_next_line(int fd)
 {
-	char	*buf;
+	char		*buf;
+	int			i;
 
-	while (buf)
+	i = 2;
+	while (i--)
 	{
 		buf = get_next_line(fd);
-		if (buf)
+		// if (buf)
+		// {
 			printf("%s", buf);
 	}
+	// }
 }
 
 int main(void)
 {
 	int	fd;
 
+	// fd = open("files/empty", O_RDWR);
 	fd = open("text.txt", O_RDONLY | O_CREAT);
+	// fd = open("files/41_no_nl", O_RDWR);
+	// fd = 1000;
+	// printf("%d\n", fd),
 	print_get_next_line(fd);
-	print_get_next_line(1);
 }
  
