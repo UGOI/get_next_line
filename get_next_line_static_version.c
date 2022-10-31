@@ -18,40 +18,33 @@
  # define BUFFER_SIZE 10
 #endif
 
-int		has_break(char *buff, int length)
+int		has_break(char *buff, int i)
 {
-	int	i;
-
-	// printf("%c", *buff);
-	// printf("\n%d\n", length);
-	// printf("KAMy\n");
 	if (!buff)
 		return (0);
-	i = 0;
-	if(*buff == '\n')
-			return (1);
-	while(*buff && i < length)
+	while(*buff)
 	{
 		if(*buff++ == '\n')
 			return (1);
-		i++;
 	}
 	return (0);
 }
 
-void		get_line(char **buff)
+void		get_line(char *buff)
 {
-	// printf("%c\n", **buff);
-	while(**buff != '\n' && **buff)
+	static int	i;
+	
+	if (!i)
+		i = 0;
+
+	while(buff[i] != '\n' && buff[i])
 	{
-		printf("Hello\n");
-		printf("%c", **buff);
-		(*buff)++;
+		printf("%c", buff[i++]);
 	}
-	if (**buff == '\n')
+	if (buff[i] == '\n')
 	{
-		printf("%c", **buff);
-		(*buff)++;
+		printf("%c", buff[i++]);
+		// i = 0;
 	}
 	return ;
 }
@@ -59,8 +52,7 @@ void		get_line(char **buff)
 
 char	*get_next_line(int fd)
 {
-	char		*buff;
-	char		*line;
+	static char	buff[BUFFER_SIZE + 1];
 	ssize_t		ret;
 	ssize_t		total;
 	int			do_once;
@@ -68,38 +60,24 @@ char	*get_next_line(int fd)
 	if (fd < 0)
 		return(NULL);
 	total = 0;
-	ret = 0;
+	ret = 1;
 	do_once = 1;
-	buff = NULL;
-	line = (char *)malloc(sizeof(char) * (100));
-	if (!line)
-		return(NULL);
-	if ((ret && !has_break(buff + total, ret)) || do_once)
+	printf("\n%ld, %d, XXX%sXXX\n", ret, !has_break(buff), buff);
+	if (ret && !has_break(buff))
 	{
-		while ((ret && !has_break(buff + total, ret)) || do_once)
+		while (ret && !has_break(buff))
 		{
-			total += ret;	
-			buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-			if (!buff)
-				return(NULL);
-			// printf("%ld, %d\n", total, BUFFER_SIZE + 1);
 			ret = read(fd, buff + total, BUFFER_SIZE);
-			// printf("%d", *(buff + total));
 			if ((ret < (ssize_t)(0)) || (!ret && do_once))
 			{
-				free(buff);
 				return(NULL);
 			}
-
+			total += ret;
 			do_once = 0;
-			// printf("\nret: %ld, has_break: %d, buff: %s\n", ret, !has_break(buff), buff);
-			printf("%c", *(buff + total));
-			*(line++) = (buff + total);
 		}
-		// buff[total + 1] = 0;
+		buff[total] = 0;	
 	}
-	// printf("-%c-", *(buff));
-	// get_line(&buff);
+	get_line(buff);
 	return (buff);
 }
 

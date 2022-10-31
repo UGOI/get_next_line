@@ -18,16 +18,16 @@
 
 void	print_get_next_line(int fd)
 {
-	char		*buf;
+	// char		*buf;
 	int			i;
 
-	i = 2;
+	i = 5;
 	while (i--)
 	{
-		buf = get_next_line(fd);
+		get_next_line(fd);
 		// if (buf)
 		// {
-			printf("%s", buf);
+			// printf("%s", buf);
 	}
 	// }
 }
