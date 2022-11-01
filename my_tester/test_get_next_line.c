@@ -6,7 +6,7 @@
 /*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 15:41:43 by sdukic            #+#    #+#             */
-/*   Updated: 2022/10/25 15:43:55 by sdukic           ###   ########.fr       */
+/*   Updated: 2022/11/01 21:29:50 by sdukic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,26 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <stdlib.h>
 
 void	print_get_next_line(int fd)
 {
 	// char		*buf;
 	int			i;
+	char		*buf;
 
-	i = 5;
+	i = 4;
 	while (i--)
 	{
-		get_next_line(fd);
-		// if (buf)
-		// {
-			// printf("%s", buf);
+		buf = get_next_line(fd);
+		if (buf)
+		{
+			printf("%s", buf);
+		}
+		free(buf);
 	}
-	// }
+	printf("TEST END\n");
+
 }
 
 int main(void)

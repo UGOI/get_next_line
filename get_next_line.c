@@ -1,106 +1,112 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/25 13:53:15 by sdukic            #+#    #+#             */
-/*   Updated: 2022/10/25 15:46:25 by sdukic           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "get_next_line.h"
 #ifndef BUFFER_SIZE    
- # define BUFFER_SIZE 10
+ # define BUFFER_SIZE 1
 #endif
 
-int		has_break(char *buff, int length)
-{
-	int	i;
-
-	// printf("%c", *buff);
-	// printf("\n%d\n", length);
-	// printf("KAMy\n");
-	if (!buff)
-		return (0);
+int	has_break(char *buf) 
+ { 
+ 	if (!buf)
+ 		return (0); 
+ 	while(*buf && *buf != '\n') 
+ 		buf++;
+	if(*buf == '\n') 
+		return (1); 
+	return (0); 
+ }
+ 
+ size_t	ft_strlen(const char *s)
+{ 
+	size_t	i;
 	i = 0;
-	if(*buff == '\n')
-			return (1);
-	while(*buff && i < length)
-	{
-		if(*buff++ == '\n')
-			return (1);
-		i++;
-	}
-	return (0);
+	while (s[i]) 
+ 		i++; 
+	return (i);
 }
 
-void		get_line(char **buff)
-{
-	// printf("%c\n", **buff);
-	while(**buff != '\n' && **buff)
+char	*ft_strjoin(char *s1, char *s2)
+{ 
+	char	*res; 
+	char	*res_cast; 
+	size_t	total_len; 
+	int		i;
+	
+	if (!s1 || !s2)
+ 		return (NULL);
+ 	total_len = ft_strlen(s1) + ft_strlen(s2);
+ 	res = malloc(sizeof(char) * (total_len + 1));
+	if (!res) 
+		return (NULL); 
+	res_cast = res; 
+	if (!res)
+		return (NULL); 
+	i = 0;
+	while (s1[i]) 
 	{
-		printf("Hello\n");
-		printf("%c", **buff);
-		(*buff)++;
+		*res_cast++ = s1[i++];
 	}
-	if (**buff == '\n')
+	free(s1);
+	while (*s2)
 	{
-		printf("%c", **buff);
-		(*buff)++;
+		*res_cast++ = *s2++; 
 	}
-	return ;
-}
-
+	*res_cast = '\0'; 
+	return (res);
+ }
 
 char	*get_next_line(int fd)
 {
-	char		*buff;
-	char		*line;
-	ssize_t		ret;
-	ssize_t		total;
-	int			do_once;
+	char *buf;
+	static char *list;
+	size_t rbyte;
+	int		i;
 	
-	if (fd < 0)
-		return(NULL);
-	total = 0;
-	ret = 0;
-	do_once = 1;
-	buff = NULL;
-	line = (char *)malloc(sizeof(char) * (100));
-	if (!line)
-		return(NULL);
-	if ((ret && !has_break(buff + total, ret)) || do_once)
+	buf = NULL;
+	list = malloc(sizeof(char) * 1);
+	*list = '\0';
+	rbyte = 1;
+	while(rbyte)
 	{
-		while ((ret && !has_break(buff + total, ret)) || do_once)
+		buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		rbyte = read(fd, buf, BUFFER_SIZE);
+		printf("<c: %c>\n", *buf);
+		buf[rbyte] = 0;
+		printf("<buf: %s>\n", buf);
+		list = ft_strjoin(list, buf);
+		if (has_break(buf))
 		{
-			total += ret;	
-			buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-			if (!buff)
-				return(NULL);
-			// printf("%ld, %d\n", total, BUFFER_SIZE + 1);
-			ret = read(fd, buff + total, BUFFER_SIZE);
-			// printf("%d", *(buff + total));
-			if ((ret < (ssize_t)(0)) || (!ret && do_once))
-			{
-				free(buff);
-				return(NULL);
-			}
-
-			do_once = 0;
-			// printf("\nret: %ld, has_break: %d, buff: %s\n", ret, !has_break(buff), buff);
-			printf("%c", *(buff + total));
-			*(line++) = (buff + total);
+			// free(buf);
+			return (list);	
 		}
-		// buff[total + 1] = 0;
+		// free(buf);
 	}
-	// printf("-%c-", *(buff));
-	// get_line(&buff);
-	return (buff);
+	return (list);
 }
 
-//Hello\nHux\n
+// void call_line(void)
+// {
+// 	int fd;
+	
+// 	fd = 1;
+// 	get_next_line(fd);
+// }
+
+// void print_line(void)
+// {
+// 	char *line;
+// 	int fd;
+	
+// 	fd = 1;
+// 	line = get_next_line(fd);
+// 	printf("%s", line);
+// }
+
+// int main(int argc, char *argv[])
+// {
+// 	print_line();
+// 	print_line();
+// 	//call_line();
+// 	return (0);
+// }
