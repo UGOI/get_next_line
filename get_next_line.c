@@ -56,57 +56,106 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (res);
  }
 
-char	*get_next_line(int fd)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	char *buf;
-	static char *list;
-	size_t rbyte;
-	int		i;
-	
-	buf = NULL;
-	list = malloc(sizeof(char) * 1);
-	*list = '\0';
-	rbyte = 1;
-	while(rbyte)
+	size_t		i;
+	char		*dest_char;
+	const char	*src_char;
+
+	if (!dest && !src && n)
+		return (NULL);
+	dest_char = dest;
+	src_char = src;
+	i = 0;
+	while (i < n)
 	{
-		buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		rbyte = read(fd, buf, BUFFER_SIZE);
-		printf("<c: %c>\n", *buf);
-		buf[rbyte] = 0;
-		printf("<buf: %s>\n", buf);
-		list = ft_strjoin(list, buf);
-		if (has_break(buf))
-		{
-			// free(buf);
-			return (list);	
-		}
-		// free(buf);
+		dest_char[i] = src_char[i];
+		i++;
 	}
-	return (list);
+	return (dest);
 }
 
-// void call_line(void)
-// {
-// 	int fd;
+int	strjoin_parser(char **list, char *buf)
+{
+	char			*parsed_buf;
+	static int		i;
 	
-// 	fd = 1;
-// 	get_next_line(fd);
-// }
+	if (buf[0] == 0)
+		return (1);
+	if (list == NULL)
+	{
+		list = malloc(sizeof(char) * 1);
+		*list = '\0';
+	}
+	printf("buf: %s\n", buf);
+	if (!i)
+		i = 0;
+	while (buf[i] != 0 && buf[i] != '\n')
+		i++;
+	if (buf[i] == 0)
+	{
+		*list = ft_strjoin(*list, buf);
+		free(buf);
+		i = 0;
+		printf("list: %s\n", *list);
+		return (1);
+	}
+	else if (buf[i] == '\n')
+	{
+		i++;
+		parsed_buf = malloc(sizeof(char) * (i + 1));
+		parsed_buf[i] = 0;
+		parsed_buf = ft_memcpy(parsed_buf, buf, (i));
+		*list = ft_strjoin(*list, parsed_buf);
+		free(parsed_buf);
+		return (0);
+	}
+	else
+		return (-1);
+}
 
-// void print_line(void)
-// {
-// 	char *line;
-// 	int fd;
+char	*get_next_line(int fd)
+{
+	char			*buf;
+	static char 	*list;
+	ssize_t			rbyte;
+	static int		joined_end;
 	
-// 	fd = 1;
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// }
-
-// int main(int argc, char *argv[])
-// {
-// 	print_line();
-// 	print_line();
-// 	//call_line();
-// 	return (0);
-// }
+	buf = NULL;
+	list = NULL;
+	rbyte = 1;
+	if (!joined_end)
+		joined_end = 1;
+	while(rbyte && joined_end)
+	{
+		buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!buf)
+			return (NULL);
+		rbyte = read(fd, buf, BUFFER_SIZE);
+		if (rbyte == 0)
+			return (list);
+		if (rbyte < (ssize_t)(0))
+		{
+			free(buf);
+			return(NULL);
+		}
+		buf[rbyte] = 0;
+		joined_end = strjoin_parser(&list, buf);
+		if (joined_end == -1)
+			printf("Error: joined_end is -1.\n");
+		// if (rbyte == (ssize_t)(0))
+		// {
+		// 	if (ft_strlen(list) == 0)
+		// 		return (NULL);
+		// 	return (list);
+		// }
+		if (!joined_end)
+		{
+			return (list);	
+		}
+	}
+	joined_end = strjoin_parser(&list, buf);
+	if (ft_strlen(list) == 0)
+		return (NULL);
+	return (list);
+}
