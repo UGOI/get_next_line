@@ -1,23 +1,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "get_next_line.h"
 #ifndef BUFFER_SIZE
  # define BUFFER_SIZE 1
 #endif
 
-int	has_break(char *buf)
- {
- 	if (!buf)
- 		return (0);
- 	while(*buf && *buf != '\n')
- 		buf++;
-	if(*buf == '\n')
-		return (1);
-	return (0);
- }
-
- size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 	i = 0;
@@ -80,39 +70,37 @@ int	strjoin_parser(char **list, char **buf)
 	char			*parsed_buf;
 	int				i;
 
-	// printf("buf: %s\n", buf);
-	if (*buf[0] == 0)
+	if (**buf == 0)
 		return (1);
 	if (*list == NULL)
 	{
 		*list = malloc(sizeof(char) * 1);
 		**list = '\0';
 	}
-	// if (!i)
 	i = 0;
-	// printf("while start\n");
-	// printf("*buf:%s\n", *buf);
-	while (*buf[i] != 0 && *buf[i] != '\n')
+	while ((*(*buf + i)) != 0 && (*(*buf + i)) != '\n')
 	{
 		i++;
-		// printf("%d, %c\n", i, *buf[i]);
 	}
-	printf("Hello\n");
-	if (*buf[i] == 0)
+	// printf("%d\n", (char) *(*buf + i));
+	if (*(*buf + i) == 0)
 	{
 		*list = ft_strjoin(*list, *buf);
+		// printf("\nHello *buf: %s\n", *buf);
 		free(*buf);
 		i = 0;
 		return (1);
 	}
-	else if (*buf[i] == '\n')
+	else if (*(*buf + i) == '\n')
 	{
 		i++;
 		parsed_buf = malloc(sizeof(char) * (i + 1));
-		parsed_buf[i] = 0;
+		*(parsed_buf + i) = 0;
 		parsed_buf = ft_memcpy(parsed_buf, *buf, (i));
 		*list = ft_strjoin(*list, parsed_buf);
 		free(parsed_buf);
+
+		memmove(*buf, *buf + i, ft_strlen(*buf + i));
 		// *buf += i;
 		return (0);
 	}
