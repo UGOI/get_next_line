@@ -6,7 +6,7 @@
 /*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 15:41:43 by sdukic            #+#    #+#             */
-/*   Updated: 2022/11/02 11:11:57 by sdukic           ###   ########.fr       */
+/*   Updated: 2022/11/02 16:22:09 by sdukic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_get_next_line(int fd)
 	int			i;
 	char		*buf;
 
-	i = 1;
+	i = 2;
 	while (i--)
 	{
 		buf = get_next_line(fd);
@@ -34,19 +34,18 @@ void	print_get_next_line(int fd)
 		}
 		free(buf);
 	}
-	printf("TEST END\n");
-
+	// buf = get_next_line(fd);
+	// printf("bufp:%s", buf);
 }
 
 int main(void)
 {
 	int	fd;
 
-	fd = open("files/empty", O_RDWR);
-	// fd = open("text.txt", O_RDONLY | O_CREAT);
+	// fd = open("files/empty", O_RDWR);
+	fd = open("text.txt", O_RDONLY | O_CREAT);
 	// fd = open("files/41_no_nl", O_RDWR);
 	// fd = 1000;
 	// printf("%d\n", fd),
 	print_get_next_line(fd);
 }
- 

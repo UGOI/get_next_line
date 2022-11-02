@@ -1,6 +1,6 @@
 #!/bin/bash
 
-buf_size=1
+buf_size=2
 
 if [[ $# -eq 0 ]]
 then
