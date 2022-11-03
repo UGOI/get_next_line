@@ -6,7 +6,7 @@
 /*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 15:41:43 by sdukic            #+#    #+#             */
-/*   Updated: 2022/11/02 23:53:49 by sdukic           ###   ########.fr       */
+/*   Updated: 2022/11/03 02:08:24 by sdukic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	t_strjoin_parser(void)
 
 void	t_get_next_line(int fd)
 {
-	printf("GET_NEXT_LINE:\n");
+	// printf("GET_NEXT_LINE_TEST:\n");
 	int			i;
 	char		*buf;
 
@@ -89,10 +89,10 @@ void	t_get_next_line(int fd)
 	while (i--)
 	{
 		buf = get_next_line(fd);
-		if (buf)
-		{
+		// if (buf)
+		// {
 			printf("%s", buf);
-		}
+		// }
 		free(buf);
 	}
 }
@@ -101,8 +101,8 @@ int main(void)
 {
 	int	fd;
 
-	// fd = open("files/empty", O_RDWR);
-	fd = open("text.txt", O_RDONLY | O_CREAT);
+	fd = open("files/empty", O_RDWR);
+	// fd = open("text.txt", O_RDONLY | O_CREAT);
 	// fd = open("files/41_no_nl", O_RDWR);
 	// fd = 1000;
 	// printf("%d\n", fd),

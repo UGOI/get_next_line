@@ -82,11 +82,9 @@ int	strjoin_parser(char **list, char **buf)
 	{
 		i++;
 	}
-	// printf("%d\n", (char) *(*buf + i));
 	if (*(*buf + i) == 0)
 	{
 		*list = ft_strjoin(*list, *buf);
-		// printf("\nHello *buf: %s\n", *buf);
 		free(*buf);
 		i = 0;
 		return (1);
@@ -100,8 +98,10 @@ int	strjoin_parser(char **list, char **buf)
 		*list = ft_strjoin(*list, parsed_buf);
 		free(parsed_buf);
 
-		memmove(*buf, *buf + i, ft_strlen(*buf + i));
-		// *buf += i;
+		// printf("strlen:[%zu]\n", ft_strlen(*buf + i));
+		// printf("buf1:[%s], buf+i:[%s]\n", *buf, *buf + i);
+		memmove(*buf, *buf + i, ft_strlen(*buf + i) + 1);
+		// printf("buf2:[%s]\n", *buf);
 		return (0);
 	}
 	else
@@ -115,6 +115,9 @@ char	*get_next_line(int fd)
 	ssize_t			rbyte;
 	static int		joined_end = 1;
 
+	// printf("GET_NEXT_LINE:\n");
+	// if (BUFFER_SIZE <= 0)
+	// 	return (NULL);
 	if (joined_end)
 		buf = NULL;
 	list = NULL;
@@ -123,6 +126,7 @@ char	*get_next_line(int fd)
 	{
 		if (joined_end)
 		{
+			// printf("buf: %s\n", buf);
 			buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 			if (!buf)
 				return (NULL);
@@ -136,8 +140,8 @@ char	*get_next_line(int fd)
 			}
 			buf[rbyte] = 0;
 		}
-
 		joined_end = strjoin_parser(&list, &buf);
+		// printf("joined_end: %d\n", joined_end);
 		if (joined_end == -1)
 			printf("Error: joined_end is -1.\n");
 		if (!joined_end)
