@@ -6,7 +6,7 @@
 /*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 09:47:48 by sdukic            #+#    #+#             */
-/*   Updated: 2022/11/03 12:05:55 by sdukic           ###   ########.fr       */
+/*   Updated: 2022/11/03 17:43:07 by sdukic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	strjoin_parser(char **list, char **buf)
 	int		i;
 
 	if (!*buf || **buf == 0)
-		return (1);
+		return (0);
 	if (*list == NULL)
 		*list = ft_initialize(1);
 	i = 0;
@@ -96,9 +96,7 @@ int	strjoin_parser(char **list, char **buf)
 	if (*(*buf + i) == 0)
 	{
 		*list = ft_strjoin(*list, *buf);
-		free(*buf);
-		i = 0;
-		return (1);
+		return (0);
 	}
 	i++;
 	parsed_buf = malloc(sizeof(char) * (i + 1));
@@ -107,5 +105,5 @@ int	strjoin_parser(char **list, char **buf)
 	*list = ft_strjoin(*list, parsed_buf);
 	free(parsed_buf);
 	ft_memcpy(*buf, *buf + i, ft_strlen(*buf + i) + 1);
-	return (0);
+	return (1);
 }

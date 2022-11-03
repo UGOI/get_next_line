@@ -6,7 +6,7 @@
 /*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 09:48:05 by sdukic            #+#    #+#             */
-/*   Updated: 2022/11/03 11:41:30 by sdukic           ###   ########.fr       */
+/*   Updated: 2022/11/03 17:46:04 by sdukic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,37 +27,33 @@ char	*ft_output(char **buf, char *list, int rbyte)
 		}
 		return (list);
 	}
-	if (**buf == 0)
-	{
-		free(*buf);
-		*buf = NULL;
-	}
 	return (list);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		*buf;
-	char			*list;
-	ssize_t			rbyte;
-	static int		joined_end = 1;
+	static char	*buf;
+	char		*list;
+	ssize_t		rbyte;
+	static int	joined_end;
 
 	list = NULL;
 	rbyte = 1;
+	if (!joined_end)
+		buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return (NULL);
 	while (1)
 	{
-		if (joined_end)
+		if (!joined_end)
 		{
-			buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-			if (!buf)
-				return (NULL);
 			rbyte = read(fd, buf, BUFFER_SIZE);
 			if (rbyte <= 0)
 				return (ft_output(&buf, list, rbyte));
 			buf[rbyte] = 0;
 		}
 		joined_end = strjoin_parser(&list, &buf);
-		if (!joined_end)
+		if (joined_end)
 			return (ft_output(&buf, list, rbyte));
 	}
 }
