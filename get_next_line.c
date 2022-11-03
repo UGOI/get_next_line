@@ -142,8 +142,8 @@ char	*get_next_line(int fd)
 		}
 		joined_end = strjoin_parser(&list, &buf);
 		// printf("joined_end: %d\n", joined_end);
-		if (joined_end == -1)
-			printf("Error: joined_end is -1.\n");
+		// if (joined_end == -1)
+		// 	printf("Error: joined_end is -1.\n");
 		if (!joined_end)
 			return (list);
 	}
