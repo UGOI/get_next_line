@@ -6,7 +6,7 @@
 /*   By: sdukic <sdukic@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 15:41:43 by sdukic            #+#    #+#             */
-/*   Updated: 2022/11/03 09:22:07 by sdukic           ###   ########.fr       */
+/*   Updated: 2022/11/03 09:57:12 by sdukic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	t_get_next_line(int fd)
 	int			i;
 	char		*buf;
 
-	i = 1;
+	i = 5;
 	while (i--)
 	{
 		buf = get_next_line(fd);
@@ -99,21 +99,22 @@ void	t_get_next_line(int fd)
 
 int main(void)
 {
-	int	fd = open("files/open_close_open.txt", O_RDWR);
+	int	fd;
 
-	char *str;
-	str = get_next_line(fd);
-	free(str);
-	str = get_next_line(fd);
-	free(str);
-	close(fd);
-	do
-	{
-		str = get_next_line(fd);
-		free(str);
-	} while (str != NULL);
-	str = get_next_line(fd);
-	// fd = open("files/open_close_open.txt", O_RDWR);
+	// char *str;
+	// str = get_next_line(fd);
+	// free(str);
+	// str = get_next_line(fd);
+	// free(str);
+	// close(fd);
+	// do
+	// {
+	// 	str = get_next_line(fd);
+	// 	free(str);
+	// } while (str != NULL);
+	// str = get_next_line(fd);
+	fd = open("text.txt", O_RDWR);
+	t_get_next_line(fd);
 	// str = get_next_line(fd);
 	// free(str);
 	// str = get_next_line(fd);
